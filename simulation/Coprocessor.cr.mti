@@ -1,0 +1,64 @@
+C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/Coprocessor.vht {2 {vcom -work work -2002 -explicit -stats=none C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/Coprocessor.vht
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity Coprocessor_vhd_tst
+-- Compiling architecture Coprocessor_arch of Coprocessor_vhd_tst
+** Warning: C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/Coprocessor.vht(63): (vcom-1207) An abstract literal and an identifier must have a separator between them.
+** Warning: C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/Coprocessor.vht(65): (vcom-1207) An abstract literal and an identifier must have a separator between them.
+
+} {} {}} C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/Coprocessor.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/Coprocessor.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity Coprocessor
+-- Compiling architecture structure of Coprocessor
+
+} {} {}} C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/computing_elements_ports_pkg.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/computing_elements_ports_pkg.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling package computing_elements_ports_pkg
+
+} {} {}} C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/OutterCE.vht {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/OutterCE.vht
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package computing_elements_ports_pkg
+-- Compiling entity OutterCE_vhd_tst
+-- Compiling architecture OutterCE_arch of OutterCE_vhd_tst
+
+} {} {}} C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/OutterCE.vhd {0 {vcom -work work -2002 -explicit -stats=none C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/OutterCE.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_SIGNED
+-- Loading package NUMERIC_STD
+-- Loading package computing_elements_ports_pkg
+-- Compiling entity OutterCE
+-- Compiling architecture structure of OutterCE
+** Error: C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/OutterCE.vhd(33): Target type ieee.std_logic_1164.STD_LOGIC_VECTOR in signal assignment is different from expression type Integer.
+** Error: C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/OutterCE.vhd(40): VHDL Compiler exiting
+
+} {12.0 14.0} {}} C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/libraries/fixed_pkg_c.vhdl {0 {vcom -work work -2002 -explicit -stats=none C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/libraries/fixed_pkg_c.vhdl
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+** Error: C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/libraries/fixed_pkg_c.vhdl(22): near ".": (vcom-1576) expecting ';'.
+
+} {7.0 8.0} {}} C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/libraries/fixed_float_types_c.vhdl {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/libraries/fixed_float_types_c.vhdl
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Compiling package fixed_float_types
+
+} {} {}}

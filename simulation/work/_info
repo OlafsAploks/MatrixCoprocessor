@@ -1,0 +1,218 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/intelFPGA_lite/17.1
+Pcomputing_elements_ports_pkg
+Z0 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z1 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z2 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+w1519308873
+Z3 dC:/Users/Olafs/Documents/Projects/Coprocessor/simulation
+8C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/computing_elements_ports_pkg.vhd
+FC:/Users/Olafs/Documents/Projects/Coprocessor/hdl/computing_elements_ports_pkg.vhd
+l0
+L4
+Vh^ndzzV]cc8mHL[g]J^U63
+!s100 hm`dD0Uk_T3XhZ6>BL4M]3
+Z4 OV;C;10.5b;63
+32
+Z5 !s110 1524256616
+!i10b 1
+Z6 !s108 1524256616.000000
+!s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/computing_elements_ports_pkg.vhd|
+!s107 C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/computing_elements_ports_pkg.vhd|
+!i113 1
+Z7 o-work work -2002 -explicit
+Z8 tExplicit 1 CvgOpt 0
+Ecoprocessor
+Z9 w1519216875
+R1
+R2
+R3
+Z10 8C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/Coprocessor.vhd
+Z11 FC:/Users/Olafs/Documents/Projects/Coprocessor/hdl/Coprocessor.vhd
+l0
+L4
+V>LfS;Q^5]?ZmOHZDSIaX?1
+!s100 aeYI@:fem^kW6N@FBWFZK3
+R4
+32
+R5
+!i10b 1
+R6
+Z12 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/Coprocessor.vhd|
+Z13 !s107 C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/Coprocessor.vhd|
+!i113 1
+R7
+R8
+Astructure
+R1
+R2
+DEx4 work 11 coprocessor 0 22 >LfS;Q^5]?ZmOHZDSIaX?1
+l16
+L12
+VHjH1D_ST94kLK07zYECBR0
+!s100 [Y6YmY1O>=>iA_G_Yocbc1
+R4
+32
+R5
+!i10b 1
+R6
+R12
+R13
+!i113 1
+R7
+R8
+Ecoprocessor_vhd_tst
+Z14 w1519217279
+R1
+R2
+R3
+Z15 8C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/Coprocessor.vht
+Z16 FC:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/Coprocessor.vht
+l0
+L30
+V:5;;MOgH>Y7iSSJ@SfS:P2
+!s100 NYIoQU<ZTMLXRc0bb^W<41
+R4
+32
+R5
+!i10b 1
+R6
+Z17 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/Coprocessor.vht|
+Z18 !s107 C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/Coprocessor.vht|
+!i113 1
+R7
+R8
+Acoprocessor_arch
+R1
+R2
+DEx4 work 19 coprocessor_vhd_tst 0 22 :5;;MOgH>Y7iSSJ@SfS:P2
+l43
+L32
+V>Ln>Ygz]Ij;9zNA@@<5gM3
+!s100 DC;Onj`DcXA]an@1^V5ad1
+R4
+32
+R5
+!i10b 1
+R6
+R17
+R18
+!i113 1
+R7
+R8
+Pfixed_float_types
+w1524255259
+R3
+8C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/libraries/fixed_float_types_c.vhdl
+FC:/Users/Olafs/Documents/Projects/Coprocessor/hdl/libraries/fixed_float_types_c.vhdl
+l0
+L16
+V3db9e13VVCjP5``a79@H;2
+!s100 cW]eNFhGGd5lB:5@0FCJB2
+R4
+32
+!s110 1524256617
+!i10b 1
+!s108 1524256617.000000
+!s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/libraries/fixed_float_types_c.vhdl|
+!s107 C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/libraries/fixed_float_types_c.vhdl|
+!i113 1
+R7
+R8
+Eoutterce
+Z19 w1524135616
+R0
+Z20 DPx4 work 28 computing_elements_ports_pkg 0 22 h^ndzzV]cc8mHL[g]J^U63
+Z21 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+DPx4 ieee 16 std_logic_signed 0 22 C<aanc0R`<LWPSe[JYRP^3
+R1
+R2
+R3
+Z22 8C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/OutterCE.vhd
+Z23 FC:/Users/Olafs/Documents/Projects/Coprocessor/hdl/OutterCE.vhd
+l0
+L11
+VW6Gb^1W6eKzOb>PM2VgkN0
+!s100 lCn^5oeKVTJJO9aQ;:e;:1
+R4
+32
+R5
+!i10b 1
+R6
+Z24 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/OutterCE.vhd|
+Z25 !s107 C:/Users/Olafs/Documents/Projects/Coprocessor/hdl/OutterCE.vhd|
+!i113 1
+R7
+R8
+Astructure
+DPx4 work 28 computing_elements_ports_pkg 0 22 ID`l>d>ESnEQi@6jKE=?<1
+R21
+DPx4 ieee 18 std_logic_unsigned 0 22 ;eZjO2D4ZDz<]0>8AL<ne1
+R1
+R2
+DEx4 work 8 outterce 0 22 9L7E@;5i<Xzh[4BZ8d@N=0
+l20
+L16
+VYeihO=6@bF>o<03NDz?d=3
+!s100 ;_ZcIbgWW85H5ei]Z4g_=3
+R4
+32
+!s110 1519303607
+!i10b 1
+!s108 1519303607.000000
+R24
+R25
+!i113 1
+R7
+R8
+Eoutterce_vhd_tst
+Z26 w1519303787
+R0
+R20
+R1
+R2
+R3
+Z27 8C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/OutterCE.vht
+Z28 FC:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/OutterCE.vht
+l0
+L31
+V_fYkBiiDzldEk;aPOToQB1
+!s100 aQmU5WocL81L7]Vi7WDOh2
+R4
+32
+R5
+!i10b 1
+R6
+Z29 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/OutterCE.vht|
+Z30 !s107 C:/Users/Olafs/Documents/Projects/Coprocessor/testbenches/OutterCE.vht|
+!i113 1
+R7
+R8
+Aoutterce_arch
+R0
+R20
+R1
+R2
+DEx4 work 16 outterce_vhd_tst 0 22 _fYkBiiDzldEk;aPOToQB1
+l45
+L33
+VGK:A<An]g899[[[MEO]=b1
+!s100 ^cdG>^hd797`mEP4bKF421
+R4
+32
+R5
+!i10b 1
+R6
+R29
+R30
+!i113 1
+R7
+R8
