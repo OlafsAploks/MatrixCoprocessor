@@ -70,17 +70,6 @@ always : PROCESS
 -- variable declarations
 BEGIN
 		--TEST CASE ### 1
---		x <= "00000000000001001011000000000000"; -- 300 Xin > LocalX(init value)
---		wait for 10 ns;
---		x <= "00000000001011101110000000000000"; -- 3000 Xin > LocalX(300)
---		wait for 10 ns;
---		x <= xType_zero_constant;					  -- 0 Xin < LocalX(3000)
---		wait for 10 ns;
---		x <= "11111111111111111101000000000000"; -- -12 Xin < LocalX(0)
---		wait for 10 ns;
---		x <= "00000000000000100000000000000000"; -- 300 Xin < LocalX(1500)
-		
-		--TEST CASE ### 2
 		x <= xType_zero_constant;																 -- |0| Xin = |LocalX(init = 0)|		 | IF -> if(false);
 		wait for 10 ns;
 		x <= "1111111111111111111111111111010000000000000000000000000000000000"; -- |-12| Xin > |LocalX(0)| 			 | IF -> if(true);

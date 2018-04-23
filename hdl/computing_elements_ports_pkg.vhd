@@ -18,19 +18,19 @@ package computing_elements_ports_pkg is
   end record outterCE_OUT;
 
   type outterCE_IN is record
-	x : x_type;
+	  x : x_type;
   end record outterCE_IN;
 
   type innerCE_OUT is record
     s : STD_LOGIC;
-    m : STD_LOGIC_VECTOR(8 DOWNTO 0);
-	  x : STD_LOGIC_VECTOR(8 DOWNTO 0);
+    m : x_type;
+	  x : x_type;
   end record innerCE_OUT;
 
   type innerCE_IN is record
     s : STD_LOGIC;
-    m : STD_LOGIC_VECTOR(8 DOWNTO 0);
-	  x : STD_LOGIC_VECTOR(8 DOWNTO 0);
+    m : x_type;
+	  x : x_type;
   end record innerCE_IN;
 
   constant xType_zero_constant : x_type := (others=>'0');--"000000000000000000000";
