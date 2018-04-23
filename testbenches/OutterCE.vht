@@ -26,16 +26,22 @@
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
+
 use work.computing_elements_ports_pkg.all;
+
+library ieee_proposed;
+use ieee_proposed.fixed_pkg.all;
 
 ENTITY OutterCE_vhd_tst IS
 END OutterCE_vhd_tst;
 ARCHITECTURE OutterCE_arch OF OutterCE_vhd_tst IS
 -- constants
 -- signals
-SIGNAL x : STD_LOGIC_VECTOR(8 DOWNTO 0);
-SIGNAL m : STD_LOGIC_VECTOR(8 DOWNTO 0);
+SIGNAL x : x_type := xType_zero_constant;
+SIGNAL m : x_type;
 SIGNAL s : STD_LOGIC;
+
+
 COMPONENT OutterCE
 	PORT (
 	input : in outterCE_IN;
@@ -50,6 +56,8 @@ BEGIN
 	output.m => m,
 	output.s => s
 	);
+	
+		
 init : PROCESS
 -- variable declarations
 BEGIN
@@ -61,14 +69,30 @@ always : PROCESS
 -- (        )
 -- variable declarations
 BEGIN
-x <= "000000001";
-wait for 10 ns;
-x <= "000000100";
-wait for 10 ns;
-x <= "000001000";
-wait for 10 ns;
-x <= "000010000";
-        -- code executes for every event on sensitivity list
+		--TEST CASE ### 1
+--		x <= "00000000000001001011000000000000"; -- 300 Xin > LocalX(init value)
+--		wait for 10 ns;
+--		x <= "00000000001011101110000000000000"; -- 3000 Xin > LocalX(300)
+--		wait for 10 ns;
+--		x <= xType_zero_constant;					  -- 0 Xin < LocalX(3000)
+--		wait for 10 ns;
+--		x <= "11111111111111111101000000000000"; -- -12 Xin < LocalX(0)
+--		wait for 10 ns;
+--		x <= "00000000000000100000000000000000"; -- 300 Xin < LocalX(1500)
+		
+		--TEST CASE ### 2
+		x <= xType_zero_constant;																 -- |0| Xin = |LocalX(init = 0)|		 | IF -> if(false);
+		wait for 10 ns;
+		x <= "1111111111111111111111111111010000000000000000000000000000000000"; -- |-12| Xin > |LocalX(0)| 			 | IF -> if(true);
+		wait for 10 ns;
+		x <= "0000000000000000000000000001111000000000000000000000000000000000"; -- |30| Xin > |LocalX(-12)|  		 | IF -> if(true);
+		wait for 10 ns;
+		x <= xType_one;																 			 -- |1| Xin < LocalX(30)				 | ELSE
+		wait for 10 ns;
+		x <= "1111111111111111111111111111110000000000000000000000000000000000"; -- -4 Xin < LocalX(30)					 | ELSE
+		wait for 10 ns;
+		x <= "0000000000000000000010111011100000000000000000000000000000000000"; -- 3000 Xin > LocalX(30)				 | IF -> if(true);
+		wait for 10 ns;
 WAIT;
 END PROCESS always;
 END OutterCE_arch;
