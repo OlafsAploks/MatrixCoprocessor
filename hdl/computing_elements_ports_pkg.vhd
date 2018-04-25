@@ -15,10 +15,12 @@ package computing_elements_ports_pkg is
   type outterCE_OUT is record
     s : STD_LOGIC;
     m : x_type;
+    phase: STD_LOGIC;
   end record outterCE_OUT;
 
   type outterCE_IN is record
 	  x : x_type;
+    phase: STD_LOGIC;
   end record outterCE_IN;
 
   type innerCE_OUT is record

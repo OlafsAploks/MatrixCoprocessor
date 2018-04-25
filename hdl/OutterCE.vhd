@@ -19,26 +19,13 @@ end OutterCE;
 architecture structure of OutterCE is
 --local signals
 signal localX : x_type := xType_zero_constant;--(others	=> '0'); -- initialized as zero vector
-
--- signal a, b, c : sfixed (8 downto -5); --"00000000.000000";
-
-
-signal a : x_type;
--- signal localX, inputX: signed()
+-- signal a : x_type;
 
 begin
-
-firstPhase : process(input.x)
+calculate : process(input.x)
 begin
-
-	-- variable'high - index of most significant bit (MSB)
-	-- variable'low - index of least significant bit (LSB)
-	-- a <= "00100000010000";
-	-- b <= "00001100010000";
-	-- report("HELLO");
-	-- report(to_string(to_real(a)));
-	a <= xType_one;
-
+if input.phase = '0' then
+	--First computing phase - works with matrixes A and B
 	if abs(input.x) >= abs(localX) then
 		output.s <= '1';
 		if input.x /= xType_zero_constant then
@@ -53,6 +40,18 @@ begin
 		output.m <=  resize((-input.x) / localX, localX'high, localX'low);
 		localX <= localX;
 	end if;
+else --second computing phase - works with matrixes (-C) and D
+	if localX /= xType_zero_constant then
+		output.m <= resize(input.x/localX, input.x'high, input.x'low);
+		output.s <= '0';
+	else
+		output.m <= input.x;
+		output.s <= '0';
+	end if;
+end if;
+
+output.phase <= input.phase;
 end process;
+
 
 end structure;

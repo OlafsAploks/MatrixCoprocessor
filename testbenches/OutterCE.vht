@@ -40,6 +40,8 @@ ARCHITECTURE OutterCE_arch OF OutterCE_vhd_tst IS
 SIGNAL x : x_type := xType_zero_constant;
 SIGNAL m : x_type;
 SIGNAL s : STD_LOGIC;
+SIGNAL phaseIN : STD_LOGIC;
+SIGNAL PhaseOUT : STD_LOGIC;
 
 
 COMPONENT OutterCE
@@ -53,8 +55,10 @@ BEGIN
 	PORT MAP (
 -- list connections between master ports and signals
 	input.x => x,
+	input.phase => phaseIN,
 	output.m => m,
-	output.s => s
+	output.s => s,
+	output.phase => phaseOUT
 	);
 	
 		
@@ -69,6 +73,7 @@ always : PROCESS
 -- (        )
 -- variable declarations
 BEGIN
+		phaseIN <= '0'; --First phase
 		--TEST CASE ### 1
 		x <= xType_zero_constant;																 -- |0| Xin = |LocalX(init = 0)|		 | IF -> if(false);
 		wait for 10 ns;
@@ -82,6 +87,23 @@ BEGIN
 		wait for 10 ns;
 		x <= "0000000000000000000010111011100000000000000000000000000000000000"; -- 3000 Xin > LocalX(30)				 | IF -> if(true);
 		wait for 10 ns;
+		
+		wait for 20 ns;
+		phaseIN <= '1'; --Second phase
+		x <= xType_zero_constant;																 
+		wait for 10 ns;
+		x <= "1111111111111111111111111111010000000000000000000000000000000000"; 
+		wait for 10 ns;
+		x <= "0000000000000000000000000001111000000000000000000000000000000000"; 
+		wait for 10 ns;
+		x <= xType_one;																 			 
+		wait for 10 ns;
+		x <= "1111111111111111111111111111110000000000000000000000000000000000"; 
+		wait for 10 ns;
+		x <= "0000000000000000000010111011100000000000000000000000000000000000"; 
+		wait for 10 ns;
+		
+		
 WAIT;
 END PROCESS always;
 END OutterCE_arch;
