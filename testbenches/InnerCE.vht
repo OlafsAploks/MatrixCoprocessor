@@ -33,6 +33,7 @@ ARCHITECTURE InnerCE_arch OF InnerCE_vhd_tst IS
 SIGNAL xIN, xOUT : x_type;
 SIGNAL mIN, mOUT : x_type;
 SIGNAL sIN, sOUT : STD_LOGIC;
+SIGNAL phaseIN, phaseOUT : STD_LOGIC;
 
 SIGNAL temp1, temp2 : x_type;
 
@@ -50,9 +51,11 @@ BEGIN
 	input.x => xIN,
 	input.m => mIN,
 	input.s => sIN,
+	input.phase => phaseIN,
 	output.m => mOUT,
 	output.x => xOUT,
-	output.s => sOUT
+	output.s => sOUT,
+	output.phase => phaseOUT
 	);
 	
 		
@@ -73,7 +76,7 @@ BEGIN
 --		temp2 <= "0000000000000000000000000000101000000000000000000000000000000000"; -- 10
 --		xIN <= resize(temp1/temp2, temp1'high, temp1'low); -- 0.4
 --		mIN <= resize(temp2/temp1, temp1'high, temp1'low); -- 2.5
-
+		phaseIN <= '0';
 		sIN <= '1';
 		xIN <= "0000000000000000000000100000001000001000100000000000000000000000";
 		mIN <= "0000000000000000000000000001100010000000000000000000000000000000";
@@ -90,13 +93,41 @@ BEGIN
 		xIN <= xType_zero_constant;
 		mIN <= xType_one;
 		wait for 10 ns;
-		sIN <= '0';
+		sIN <= '1';
 		xIN <= "0000000000000000000000000001111000110000000000000000000000000000"; --30.1875
 		mIN <= "0000000000000000000000000001111000001100000000000000000000000000"; --30.0469
 		wait for 10 ns;
 		sIN <= '0';
 		xIN <= xType_one;
 		mIN <= xType_zero_constant;
+		
+		wait for 20 ns;
+		-- Second computing phase
+		phaseIN <= '1';
+		sIN <= '1';
+		xIN <= "0000000000000000000000100000001000001000100000000000000000000000";
+		mIN <= "0000000000000000000000000001100010000000000000000000000000000000";
+		wait for 10 ns;
+		sIN <= '0';
+		xIN <= "0000000000000000000000000000010000000000000000000000000000000000"; --4
+		mIN <= "0000000000000000000000000000101000000000000000000000000000000000"; --10
+		wait for 10 ns;
+		sIN <= '1';
+		xIN <= "0000000000000000000000000001111011000000000000000000000000000000"; --30.75
+		mIN <= "0000000000000000000000000000101000000000000000000000000000000000"; --10 
+		wait for 10 ns;
+		sIN <= '1';
+		xIN <= xType_zero_constant;
+		mIN <= xType_one;
+		wait for 10 ns;
+		sIN <= '1';
+		xIN <= "0000000000000000000000000001111000110000000000000000000000000000"; --30.1875
+		mIN <= "0000000000000000000000000001111000001100000000000000000000000000"; --30.0469
+		wait for 10 ns;
+		sIN <= '0';
+		xIN <= xType_one;
+		mIN <= xType_zero_constant;
+		
 WAIT;
 END PROCESS always;
 END InnerCE_arch;

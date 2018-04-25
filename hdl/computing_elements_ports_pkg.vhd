@@ -25,12 +25,14 @@ package computing_elements_ports_pkg is
 
   type innerCE_OUT is record
     s : STD_LOGIC;
+    phase: STD_LOGIC;
     m : x_type;
 	  x : x_type;
   end record innerCE_OUT;
 
   type innerCE_IN is record
     s : STD_LOGIC;
+    phase: STD_LOGIC;
     m : x_type;
 	  x : x_type;
   end record innerCE_IN;
