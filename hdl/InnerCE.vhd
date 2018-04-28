@@ -10,7 +10,7 @@ use work.computing_elements_ports_pkg.all;
 
 entity InnerCE is
 	PORT(
-	--CLOCK??
+		CLK: in STD_LOGIC;
 		input: in innerCE_IN;
 		output: out innerCE_OUT
 	);
@@ -23,25 +23,27 @@ signal temp: x_type;
 -- signal a : x_type;
 begin
 --first computing phase
-calculate : process(input.x)
+calculate : process(CLK)
 begin
-	if input.phase = '0' then
-		--First computing phase - working with matrixes A and B
-		if input.s = '1' then
-			output.x <= resize(input.m*input.x + localX, output.x'high, output.x'low);
-			localX <= input.x;
-		else
-			output.x <= resize(input.m*localX + input.x, output.x'high, output.x'low);
-			-- localX <= localX;
+	if CLK='1' AND CLK'event then
+		if input.phase = '0' then
+			--First computing phase - working with matrixes A and B
+			if input.s = '1' then
+				output.x <= resize(input.m*input.x + localX, output.x'high, output.x'low);
+				localX <= input.x;
+			else
+				output.x <= resize(input.m*localX + input.x, output.x'high, output.x'low);
+				-- localX <= localX;
+			end if;
+			output.m <= input.m;
+			output.s <= input.s;
+		else --Second computing phase - working with matrixes (-C) and D
+			output.x <=  resize(input.x - input.m*localX, localX'high, localX'low);
+			output.m <= input.m;
+			output.s <= '0';
 		end if;
-		output.m <= input.m;
-		output.s <= input.s;
-	else --Second computing phase - working with matrixes (-C) and D
-		output.x <=  resize(input.x - input.m*localX, localX'high, localX'low);
-		output.m <= input.m;
-		output.s <= '0';
+		output.phase <= input.phase;
 	end if;
-	output.phase <= input.phase;
 end process;
 
 end structure;

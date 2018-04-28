@@ -36,7 +36,9 @@ ENTITY OutterCE_vhd_tst IS
 END OutterCE_vhd_tst;
 ARCHITECTURE OutterCE_arch OF OutterCE_vhd_tst IS
 -- constants
+constant Clk_period : time := 10 ns;
 -- signals
+signal clk : std_logic := '0';
 SIGNAL x : x_type := xType_zero_constant;
 SIGNAL m : x_type;
 SIGNAL s : STD_LOGIC;
@@ -46,6 +48,7 @@ SIGNAL PhaseOUT : STD_LOGIC;
 
 COMPONENT OutterCE
 	PORT (
+	CLK : in STD_LOGIC;
 	input : in outterCE_IN;
 	output :  out outterCE_OUT
 	);
@@ -54,6 +57,7 @@ BEGIN
 	i1 : OutterCE
 	PORT MAP (
 -- list connections between master ports and signals
+	CLK => clk,
 	input.x => x,
 	input.phase => phaseIN,
 	output.m => m,
@@ -68,6 +72,16 @@ BEGIN
         -- code that executes only once
 WAIT;
 END PROCESS init;
+
+Clk_process : process
+   begin
+		clk <= '0';
+		wait for Clk_period/2;
+		clk <= '1';
+		wait for Clk_period/2;
+   end process Clk_process;
+	
+	
 always : PROCESS
 -- optional sensitivity list
 -- (        )

@@ -10,7 +10,7 @@ use work.computing_elements_ports_pkg.all;
 
 entity OutterCE is
 	PORT(
-	--CLOCK??
+		CLK: in STD_LOGIC;
 		input: in outterCE_IN;
 		output: out outterCE_OUT
 	);
@@ -22,35 +22,37 @@ signal localX : x_type := xType_zero_constant;--(others	=> '0'); -- initialized 
 -- signal a : x_type;
 
 begin
-calculate : process(input.x)
+calculate : process(CLK)
 begin
-if input.phase = '0' then
-	--First computing phase - works with matrixes A and B
-	if abs(input.x) >= abs(localX) then
-		output.s <= '1';
-		if input.x /= xType_zero_constant then
-			output.m <= resize(localX / input.x, localX'high, localX'low);
-			localX <= input.x;
+if CLK='1' AND CLK'event then
+	if input.phase = '0' then
+		--First computing phase - works with matrixes A and B
+		if abs(input.x) >= abs(localX) then
+			output.s <= '1';
+			if input.x /= xType_zero_constant then
+				output.m <= resize((-localX) / input.x, localX'high, localX'low);
+				localX <= input.x;
+			else
+				output.m <= xType_zero_constant;
+				localX <= input.x;
+			end if;
 		else
-			output.m <= xType_zero_constant;
-			localX <= input.x;
+			output.s <= '0';
+			output.m <=  resize((-input.x) / localX, localX'high, localX'low);
+			localX <= localX;
 		end if;
-	else
-		output.s <= '0';
-		output.m <=  resize((-input.x) / localX, localX'high, localX'low);
-		localX <= localX;
+	else --second computing phase - works with matrixes (-C) and D
+		if localX /= xType_zero_constant then
+			output.m <= resize(input.x/localX, input.x'high, input.x'low);
+			output.s <= '0';
+		else
+			output.m <= input.x;
+			output.s <= '0';
+		end if;
 	end if;
-else --second computing phase - works with matrixes (-C) and D
-	if localX /= xType_zero_constant then
-		output.m <= resize(input.x/localX, input.x'high, input.x'low);
-		output.s <= '0';
-	else
-		output.m <= input.x;
-		output.s <= '0';
-	end if;
-end if;
 
-output.phase <= input.phase;
+	output.phase <= input.phase;
+end if;
 end process;
 
 

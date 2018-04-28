@@ -29,7 +29,9 @@ ENTITY InnerCE_vhd_tst IS
 END InnerCE_vhd_tst;
 ARCHITECTURE InnerCE_arch OF InnerCE_vhd_tst IS
 -- constants
+constant Clk_period : time := 10 ns;
 -- signals
+signal clk : std_logic := '0';
 SIGNAL xIN, xOUT : x_type;
 SIGNAL mIN, mOUT : x_type;
 SIGNAL sIN, sOUT : STD_LOGIC;
@@ -40,6 +42,7 @@ SIGNAL temp1, temp2 : x_type;
 
 COMPONENT InnerCE
 	PORT (
+	clk : in STD_LOGIC;
 	input : in innerCE_IN;
 	output :  out innerCE_OUT
 	);
@@ -48,6 +51,7 @@ BEGIN
 	UUT : InnerCE
 	PORT MAP (
 -- list connections between master ports and signals
+	clk => clk,
 	input.x => xIN,
 	input.m => mIN,
 	input.s => sIN,
@@ -63,13 +67,25 @@ init : PROCESS
 -- variable declarations
 BEGIN
         -- code that executes only once
-WAIT;
+WAIT;	
+	
 END PROCESS init;
+
+Clk_process : process
+   begin
+		clk <= '0';
+		wait for Clk_period/2;
+		clk <= '1';
+		wait for Clk_period/2;
+   end process Clk_process;
+
+
 always : PROCESS
 -- optional sensitivity list
 -- (        )
 -- variable declarations
 BEGIN
+
 		--00000000000000000000000000011110.00000000000000000000000000000000
 		--TEST CASE ### 1
 --		temp1 <= "0000000000000000000000000000010000000000000000000000000000000000"; -- 4
