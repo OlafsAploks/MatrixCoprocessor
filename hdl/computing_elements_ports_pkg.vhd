@@ -37,6 +37,36 @@ package computing_elements_ports_pkg is
 	  x : x_type;
   end record innerCE_IN;
 
+  -- type IOcontroller_OUT is record
+  -- end record IOcontroller_OUT;
+  --
+  -- type IOcontroller_IN is record
+  -- end record IOcontroller_IN;
+
+  type valueAndPhase is record
+    value: x_type;
+    phase: STD_LOGIC;
+  end record valueAndPhase;
+
+  type SystolicArray_IN is record
+    column1: valueAndPhase;
+    column2: valueAndPhase;
+    column3: valueAndPhase;
+    column4: valueAndPhase;
+    column5: valueAndPhase;
+    column6: valueAndPhase;
+    column7: valueAndPhase;
+    column8: valueAndPhase;
+  end record SystolicArray_IN;
+
+  type SystolicArray_OUT is record
+    column1: x_type;
+    column2: x_type;
+    column3: x_type;
+    column4: x_type;
+  end record SystolicArray_OUT;
+
+
   constant xType_zero_constant : x_type := (others=>'0');--"000000000000000000000";
   constant xType_one : x_type := (0 => '1', others => '0');
   constant xType_lowest_value : x_type := (
