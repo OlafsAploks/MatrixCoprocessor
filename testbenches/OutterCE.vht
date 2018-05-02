@@ -61,8 +61,8 @@ BEGIN
 	input.x => x,
 	input.phase => phaseIN,
 	output.m => m,
-	output.s => s,
-	output.phase => phaseOUT
+	output.s => s
+--	output.phase => phaseOUT
 	);
 	
 		
@@ -86,7 +86,59 @@ always : PROCESS
 -- optional sensitivity list
 -- (        )
 -- variable declarations
-BEGIN
+BEGIN	
+
+--		--all branches
+--		wait until rising_edge(clk);
+--		wait until rising_edge(clk);
+--		wait until rising_edge(clk); -- unknown values flowing in (not defined)
+--		phaseIN <= '0';
+--		wait until rising_edge(clk); --1.
+--		x <= "1111111111111111111111111111111100000000000000000000000000000000";
+--		wait until rising_edge(clk); --2.
+--		x <= "1111111111111111111111111111111000000000000000000000000000000000";
+--		wait until rising_edge(clk); --3.
+--		x <= "0000000000000000000000000000000000000000000000000000000000000000";
+--		wait until rising_edge(clk); --4.
+--		x <= "0000000000000000000000000000000000000000000000000000000000000000";
+--		wait until rising_edge(clk); --5.
+--		phaseIN <= '1';
+--		x <= "0000000000000000000000000000000000000000000000000000000000000000";
+--		wait until rising_edge(clk); --6.
+--		wait for 30 ns;
+		
+
+		--oe_2_1 start test case
+		phaseIN <= '0';
+		wait until rising_edge(clk); --1.
+		x <= "0000000000000000000000000000000000000000000000000000000000000000"; --0
+		wait until rising_edge(clk); --2.
+		x <= "0000000000000000000000000000000100000000000000000000000000000000";
+		wait until rising_edge(clk); --3.
+		x <= "0000000000000000000000000000000000000000000000000000000000000000";
+		wait until rising_edge(clk); --4.
+		x <= "0000000000000000000000000000000000000000000000000000000000000000";
+		wait until rising_edge(clk); --5.
+		phaseIN <= '1';
+		x <= "0000000000000000000000000000000000000000000000000000000000000000";
+		wait until rising_edge(clk); --6.
+		wait for 30 ns;
+		
+		
+		phaseIN <= '0';
+		x <= "0000000000000000000000000000000100000000000000000000000000000000";
+		wait until rising_edge(clk);
+		x <= "0000000000000000000000000000000000000000000000000000000000000000";
+		wait until rising_edge(clk);
+		x <= "0000000000000000000000000000000000000000000000000000000000000000";
+		wait until rising_edge(clk);
+		x <= "0000000000000000000000000000000000000000000000000000000000000000";
+		wait until rising_edge(clk);
+		phaseIN <= '1';
+		x <= "0000000000000000000000000000000100000000000000000000000000000000";
+		wait until rising_edge(clk);
+		x <= "0000000000000000000000000000000100000000000000000000000000000000";
+		wait until rising_edge(clk);
 		phaseIN <= '0'; --First phase
 		--TEST CASE ### 1
 		x <= xType_zero_constant;																 -- |0| Xin = |LocalX(init = 0)|		 | IF -> if(false);

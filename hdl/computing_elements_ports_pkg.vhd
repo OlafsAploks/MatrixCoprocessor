@@ -9,13 +9,14 @@ use ieee_proposed.fixed_pkg.all;
 package computing_elements_ports_pkg is
 
   subtype x_type is sfixed(31 downto -32); --2^(10-1) = +/- 512
+  subtype address is std_logic_vector(5 downto 0); --2^6 = 64; N=4;P=4;
   -- subtype x_type is signed(8 downto 0);
 
   -- Outputs outter computing element.
   type outterCE_OUT is record
     s : STD_LOGIC;
     m : x_type;
-    phase: STD_LOGIC;
+    -- phase: STD_LOGIC;
   end record outterCE_OUT;
 
   type outterCE_IN is record
@@ -36,12 +37,6 @@ package computing_elements_ports_pkg is
     m : x_type;
 	  x : x_type;
   end record innerCE_IN;
-
-  -- type IOcontroller_OUT is record
-  -- end record IOcontroller_OUT;
-  --
-  -- type IOcontroller_IN is record
-  -- end record IOcontroller_IN;
 
   type valueAndPhase is record
     value: x_type;
