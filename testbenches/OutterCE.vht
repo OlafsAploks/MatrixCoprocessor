@@ -26,11 +26,11 @@
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
+use ieee.fixed_pkg.all;
 
 use work.computing_elements_ports_pkg.all;
-
-library ieee_proposed;
-use ieee_proposed.fixed_pkg.all;
+--library ieee_proposed;
+--use ieee_proposed.fixed_pkg.all;
 
 ENTITY OutterCE_vhd_tst IS
 END OutterCE_vhd_tst;
@@ -64,8 +64,8 @@ BEGIN
 	output.s => s
 --	output.phase => phaseOUT
 	);
-	
-		
+
+
 init : PROCESS
 -- variable declarations
 BEGIN
@@ -80,13 +80,13 @@ Clk_process : process
 		clk <= '1';
 		wait for Clk_period/2;
    end process Clk_process;
-	
-	
+
+
 always : PROCESS
 -- optional sensitivity list
 -- (        )
 -- variable declarations
-BEGIN	
+BEGIN
 
 --		--all branches
 --		wait until rising_edge(clk);
@@ -106,7 +106,7 @@ BEGIN
 --		x <= "0000000000000000000000000000000000000000000000000000000000000000";
 --		wait until rising_edge(clk); --6.
 --		wait for 30 ns;
-		
+
 
 		--oe_2_1 start test case
 		phaseIN <= '0';
@@ -123,8 +123,8 @@ BEGIN
 		x <= "0000000000000000000000000000000000000000000000000000000000000000";
 		wait until rising_edge(clk); --6.
 		wait for 30 ns;
-		
-		
+
+
 		phaseIN <= '0';
 		x <= "0000000000000000000000000000000100000000000000000000000000000000";
 		wait until rising_edge(clk);
@@ -153,23 +153,23 @@ BEGIN
 		wait for 10 ns;
 		x <= "0000000000000000000010111011100000000000000000000000000000000000"; -- 3000 Xin > LocalX(30)				 | IF -> if(true);
 		wait for 10 ns;
-		
+
 		wait for 20 ns;
 		phaseIN <= '1'; --Second phase
-		x <= xType_zero_constant;																 
+		x <= xType_zero_constant;
 		wait for 10 ns;
-		x <= "1111111111111111111111111111010000000000000000000000000000000000"; 
+		x <= "1111111111111111111111111111010000000000000000000000000000000000";
 		wait for 10 ns;
-		x <= "0000000000000000000000000001111000000000000000000000000000000000"; 
+		x <= "0000000000000000000000000001111000000000000000000000000000000000";
 		wait for 10 ns;
-		x <= xType_one;																 			 
+		x <= xType_one;
 		wait for 10 ns;
-		x <= "1111111111111111111111111111110000000000000000000000000000000000"; 
+		x <= "1111111111111111111111111111110000000000000000000000000000000000";
 		wait for 10 ns;
-		x <= "0000000000000000000010111011100000000000000000000000000000000000"; 
+		x <= "0000000000000000000010111011100000000000000000000000000000000000";
 		wait for 10 ns;
-		
-		
+
+
 WAIT;
 END PROCESS always;
 END OutterCE_arch;

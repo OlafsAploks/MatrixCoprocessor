@@ -19,11 +19,11 @@
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-
+use ieee.fixed_pkg.all;
 use work.computing_elements_ports_pkg.all;
 
-library ieee_proposed;
-use ieee_proposed.fixed_pkg.all;
+--library ieee_proposed;
+--use ieee_proposed.fixed_pkg.all;
 
 ENTITY InnerCE_vhd_tst IS
 END InnerCE_vhd_tst;
@@ -61,14 +61,14 @@ BEGIN
 	output.s => sOUT,
 	output.phase => phaseOUT
 	);
-	
-		
+
+
 init : PROCESS
 -- variable declarations
 BEGIN
         -- code that executes only once
-WAIT;	
-	
+WAIT;
+
 END PROCESS init;
 
 Clk_process : process
@@ -119,7 +119,7 @@ BEGIN
 --		sIN <= '';
 --		mIn <= "00000000000000000000000000011110.00000000000000000000000000000000";
 --		wait until rising_edge(clk);
-		
+
 		--00000000000000000000000000011110.00000000000000000000000000000000
 		xIN <= "0000000000000000000000000000000000000000000000000000000000000000"; --0
 		phaseIN <= '0';
@@ -129,7 +129,7 @@ BEGIN
 		mIN <= "0000000000000000000000000000000000000000000000000000000000000000"; 	--0
 		wait until rising_edge(clk); -- 2nd cycle
 		sIN <= '0';
-		xIN <= "0000000000000000000000000000000100000000000000000000000000000000";	--1 
+		xIN <= "0000000000000000000000000000000100000000000000000000000000000000";	--1
 		mIN <= "0000000000000000000000000000000000000000000000000000000000000000"; --0
 		wait until rising_edge(clk); -- 3rd
 		sIN <= '0';
@@ -145,9 +145,9 @@ BEGIN
 		xIN <= "0000000000000000000000000000000100000000000000000000000000000000"; --1
 		mIN <= "0000000000000000000000000000000100000000000000000000000000000000"; --1
 		wait until rising_edge(clk); --6th
-		
-		
-		
+
+
+
 		sIN <= '1';
 		xIN <= "0000000000000000000000100000001000001000100000000000000000000000";
 		mIN <= "0000000000000000000000000001100010000000000000000000000000000000";
@@ -158,7 +158,7 @@ BEGIN
 		wait for 10 ns;
 		sIN <= '1';
 		xIN <= "0000000000000000000000000001111011000000000000000000000000000000"; --30.75
-		mIN <= "0000000000000000000000000000101000000000000000000000000000000000"; --10 
+		mIN <= "0000000000000000000000000000101000000000000000000000000000000000"; --10
 		wait for 10 ns;
 		sIN <= '1';
 		xIN <= xType_zero_constant;
@@ -171,7 +171,7 @@ BEGIN
 		sIN <= '0';
 		xIN <= xType_one;
 		mIN <= xType_zero_constant;
-		
+
 		wait for 20 ns;
 		-- Second computing phase
 		phaseIN <= '1';
@@ -185,7 +185,7 @@ BEGIN
 		wait for 10 ns;
 		sIN <= '1';
 		xIN <= "0000000000000000000000000001111011000000000000000000000000000000"; --30.75
-		mIN <= "0000000000000000000000000000101000000000000000000000000000000000"; --10 
+		mIN <= "0000000000000000000000000000101000000000000000000000000000000000"; --10
 		wait for 10 ns;
 		sIN <= '1';
 		xIN <= xType_zero_constant;
@@ -198,7 +198,7 @@ BEGIN
 		sIN <= '0';
 		xIN <= xType_one;
 		mIN <= xType_zero_constant;
-		
+
 WAIT;
 END PROCESS always;
 END InnerCE_arch;

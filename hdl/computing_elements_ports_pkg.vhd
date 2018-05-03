@@ -2,13 +2,15 @@ library ieee;
 use ieee.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
-library ieee_proposed;
-use ieee_proposed.fixed_pkg.all;
+use ieee.fixed_pkg.all;
+-- library ieee_proposed;
+-- use ieee_proposed.fixed_pkg.all;
 
 
 package computing_elements_ports_pkg is
 
   subtype x_type is sfixed(31 downto -32); --2^(10-1) = +/- 512
+  -- subtype x_type is sfixed(15 downto -14); --2^(10-1) = +/- 512
   subtype address is std_logic_vector(5 downto 0); --2^6 = 64; N=4;P=4;
   -- subtype x_type is signed(8 downto 0);
 

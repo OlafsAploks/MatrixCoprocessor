@@ -19,11 +19,11 @@
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-
+use ieee.fixed_pkg.all;
 use work.computing_elements_ports_pkg.all;
 
-library ieee_proposed;
-use ieee_proposed.fixed_pkg.all;
+--library ieee_proposed;
+--use ieee_proposed.fixed_pkg.all;
 
 ENTITY SystolicArray_vhd_SUBTRACTION_tst IS
 END SystolicArray_vhd_SUBTRACTION_tst;
@@ -80,14 +80,14 @@ BEGIN
 		input.column8.value => column8Value,
 		input.column8.phase => column8Phase
 	);
-	
-		
+
+
 init : PROCESS
 -- variable declarations
 BEGIN
         -- code that executes only once
-WAIT;	
-	
+WAIT;
+
 END PROCESS init;
 
 Clk_process : process
