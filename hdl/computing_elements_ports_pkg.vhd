@@ -45,6 +45,9 @@ package computing_elements_ports_pkg is
     phase: STD_LOGIC;
   end record valueAndPhase;
 
+  type SystolicArrayScale_IN is array (8 downto 1) of valueAndPhase;
+  type SystolicArrayScale_OUT is array (4 downto 1) of x_type;
+
   type SystolicArray_IN is record
     column1: valueAndPhase;
     column2: valueAndPhase;
@@ -76,6 +79,10 @@ package computing_elements_ports_pkg is
   constant xType_random_value : x_type := (
     9      => '1',
     others => '0' );
+  constant defaultValueAndPhase : valueAndPhase := (
+    value => xType_zero_constant,
+    phase => '0'
+  );
 --  constant c_FROM_FIFO_INIT : t_FROM_FIFO := (wr_full => '0',
 --                                              rd_empty => '1',
 --                                              rd_dv => '0',
