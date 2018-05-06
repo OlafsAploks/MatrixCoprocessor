@@ -19,11 +19,11 @@
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-use ieee.fixed_pkg.all;
+--use ieee.fixed_pkg.all;
 use work.computing_elements_ports_pkg.all;
 
---library ieee_proposed;
---use ieee_proposed.fixed_pkg.all;
+library ieee_proposed;
+use ieee_proposed.fixed_pkg.all;
 
 ENTITY SystolicArray_vhd_MULTIPLICATION_tst IS
 END SystolicArray_vhd_MULTIPLICATION_tst;

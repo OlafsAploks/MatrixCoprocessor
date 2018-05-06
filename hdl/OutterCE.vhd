@@ -2,11 +2,9 @@ LIBRARY ieee ;
 USE ieee.std_logic_1164.all ;
 use IEEE.STD_LOGIC_signed.ALL;
 use IEEE.STD_LOGIC_ARITH.ALL;
-use ieee.fixed_pkg.all;
 
--- library ieee_proposed;
--- use ieee_proposed.fixed_pkg.all;
--- use ieee.fixed_generic_pkg.all;
+library ieee_proposed;
+use ieee_proposed.fixed_pkg.all;
 
 use work.computing_elements_ports_pkg.all;
 
