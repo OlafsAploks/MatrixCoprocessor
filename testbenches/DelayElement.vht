@@ -13,10 +13,10 @@ ARCHITECTURE DelayElement_arch OF DelayElement_vhd_tst IS
 constant Clk_period : time := 10 ns;
 -- signals
 signal clk : std_logic := '0';
-SIGNAL xIN, xOUT, xOUT2, xOUT3 : x_type;
-SIGNAL phaseIN, phaseOUT, phaseOUT2, phaseOUT3 : STD_LOGIC;
+SIGNAL xIN, xOUT, xOUT2, xOUT3, xOUT4 : x_type;
+SIGNAL phaseIN, phaseOUT, phaseOUT2, phaseOUT3, phaseOUT4 : STD_LOGIC;
 SIGNAL reset : STD_LOGIC := '1';
-SIGNAL resetOUT, resetOUT2, resetOUT3 : STD_LOGIC;
+SIGNAL resetOUT, resetOUT2, resetOUT3, resetOUT4 : STD_LOGIC;
 
 component DelayElement
 GENERIC(DELAYCOUNT : INTEGER);
@@ -64,6 +64,16 @@ PORT MAP (
 		output.phase => phaseOUT3
 	);
 
+	UUT_DELAY_0 : DelayElement
+	GENERIC MAP ( DELAYCOUNT => 0)
+	PORT MAP (
+		CLK => clk,
+		resetIN => reset,
+		input.value => xIN,
+		input.phase => phaseIN,
+		output.value => xOUT4,
+		output.phase => phaseOUT4
+	);
 
 init : PROCESS
 BEGIN

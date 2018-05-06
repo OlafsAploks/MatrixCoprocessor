@@ -31,19 +31,25 @@ signal store : storedsignals;
 begin
 	delayprocess : process(CLK)
 	begin
-		if CLK='1' and CLK'event then
-			if counter < DELAYCOUNT then
-				store(counter) <= input;
-				output <= defaultValueAndPhase;
-				counter <= counter + 1;
-			else
-				if counter < 8 then
+		if DELAYCOUNT = 0 then
+			if CLK='1' and CLK'event then
+				output <= input;
+			end if;
+		else -- 1 to N delay
+			if CLK='1' and CLK'event then
+				if counter < DELAYCOUNT then
 					store(counter) <= input;
+					output <= defaultValueAndPhase;
 					counter <= counter + 1;
-				end if;
-				if reader < 8 then
-					output <= store(reader);
-					reader <= reader + 1;
+				else
+					if counter < 8 then
+						store(counter) <= input;
+						counter <= counter + 1;
+					end if;
+					if reader < 8 then
+						output <= store(reader);
+						reader <= reader + 1;
+					end if;
 				end if;
 			end if;
 		end if;
