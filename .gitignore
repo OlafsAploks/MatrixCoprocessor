@@ -1,3 +1,4 @@
 synthesis/
 component_projects/
 simulation/
+*.bak

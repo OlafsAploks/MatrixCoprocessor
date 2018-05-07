@@ -9,8 +9,9 @@ use ieee_proposed.fixed_pkg.all;
 
 package computing_elements_ports_pkg is
 
-  subtype x_type is sfixed(31 downto -32); --2^(10-1) = +/- 512
-  -- subtype x_type is sfixed(15 downto -14); --2^(10-1) = +/- 512
+  -- subtype x_type is sfixed(31 downto -32); --2^(10-1) = +/- 512
+  -- subtype x_type is sfixed(15 downto -14);
+  subtype x_type is sfixed(8 downto -12); --2^(10-1) = +/- 512
   subtype address is std_logic_vector(5 downto 0); --2^6 = 64; N=4;P=4;
   -- subtype x_type is signed(8 downto 0);
 
@@ -75,9 +76,6 @@ package computing_elements_ports_pkg is
     others => '1' );
   constant xType_max_value : x_type := (
     1      => '1',
-    others => '0' );
-  constant xType_random_value : x_type := (
-    9      => '1',
     others => '0' );
   constant defaultValueAndPhase : valueAndPhase := (
     value => xType_zero_constant,
