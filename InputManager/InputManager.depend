@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1526024487 source:c:\users\olafs\documents\projects\coprocessor\inputmanager\main.cpp
+	<iostream>
+	<fstream>
+
