@@ -35,6 +35,18 @@ architecture structure of Coprocessor is
 	oe	:	IN  STD_LOGIC_VECTOR (15 DOWNTO 0)
 	);
 	END COMPONENT;
+
+	COMPONENT InputControllerPerf is
+		PORT(
+	  --ROM?
+			CLK: in STD_LOGIC;
+			enable: in STD_LOGIC;
+			reset: in STD_LOGIC;
+			input: in InputController_IN;
+			output: out SystolicArray_IN
+		);
+	end COMPONENT;
+
 	--constants
 	constant oeENABLE : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 	constant oeDISABLE : STD_LOGIC_VECTOR(15 downto 0) := (others => '1');
@@ -42,13 +54,13 @@ architecture structure of Coprocessor is
 	signal read_enabled, write_enabled : STD_LOGIC := '0';
 	signal address : STD_LOGIC_VECTOR(17 downto 0) := (others => '0');
 	signal ce, we, oe, ub, lb : STD_LOGIC;
-	signal data_out : STD_LOGIC_VECTOR(15 downto 0) := (others => '0'); --data that comes out of memory
-	signal data_in : STD_LOGIC_VECTOR(15 downto 0); --data that needs to be written in memory
+	signal data_out, write_pointer : STD_LOGIC_VECTOR(15 downto 0) := (others => '0'); --data that comes out of memory
+	signal data_in : STD_LOGIC_VECTOR(15 downto 0) := "0000000001000001"; --data that needs to be written in memory
 	signal oeVector : STD_LOGIC_VECTOR(15 downto 0);
 	-- 0 => add, 1 => subtract, 2 => multiplication, 3 => Inversion
 	signal operation : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
 	--local memory
-	type columnsignals is array(15 downto 0) of x_type;
+	type columnsignals is array(15 downto 0) of data_from_memory;
 	-- signal column1, column2, column3, column4,
 	-- 			 column5, column6, column7, column8 : columnsignals;
 	signal A, B : columnSignals;
@@ -62,30 +74,76 @@ architecture structure of Coprocessor is
 	signal clocky : STD_LOGIC := '0';
 	signal convertToSignal : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 	signal enable : STD_LOGIC := '0';
+	--MEM_READ local
+	signal readingInA : STD_LOGIC := '1';
+	---
+	type RAMoutCounter is array(4 downto 1) of INTEGER;
+	signal RAMindexCounter : RAMoutCounter := (1 => 0,
+																								2 => 4,
+																								3 => 8,
+																								4	=> 12);
+	signal RAMtoInputController: InputController_IN;
+	signal signalForOutputController: SystolicArray_OUT;
+
 begin
---TESTING ZONE
-testigais : process(SW(1), dividedClock)
+-- TESTING ZONE
+
+-- testigais : process(SW(1), dividedClock)
+-- begin
+-- 	if dividedClock = '1' and dividedClock'event then
+-- 		if enable = '1' then
+-- 			if SW(1) = '1' then
+-- 				array_data <= A(array_counter);
+-- 				array_counter <= array_counter + 1;
+-- 			elsif SW(1) = '0' then
+-- 				array_data <= B(array_counter);
+-- 				array_counter <= array_counter + 1;
+-- 			end if;
+-- 			-- convertToSignal <= to_slv(array_data);
+-- 		elsif enable = '0' then
+-- 			array_counter <= 0;
+-- 		end if;
+-- 	end if;
+-- end process;
+-- LEDG <= convertToSignal(7 downto 0);
+-- LEDR(7 downto 0) <= convertToSignal(15 downto 8);
+
+LEDG <= RAMtoInputController(5)(7 downto 0);
+LEDR(7 downto 0) <= RAMtoInputController(5)(15 downto 8);
+
+dataToInContr : process(SW(1), dividedClock)
 begin
 	if dividedClock = '1' and dividedClock'event then
-		if enable = '1' then
-			if SW(1) = '1' then
-				array_data <= A(array_counter);
-				array_counter <= array_counter + 1;
-			elsif SW(1) = '0' then
-				array_data <= B(array_counter);
-				array_counter <= array_counter + 1;
+		if enable = '1' then --done reading memory and writing to ram
+			if RAMindexCounter(1) < 4 then
+				--each row has its own counter
+				RAMtoInputController(1) <= A(RAMindexCounter(1));
+				RAMtoInputController(2) <= A(RAMindexCounter(2));
+				RAMtoInputController(3) <= A(RAMindexCounter(3));
+				RAMtoInputController(4) <= A(RAMindexCounter(4));
+				RAMtoInputController(5) <= B(RAMindexCounter(1));
+				RAMtoInputController(6) <= B(RAMindexCounter(2));
+				RAMtoInputController(7) <= B(RAMindexCounter(3));
+				RAMtoInputController(8) <= B(RAMindexCounter(4));
+				addToCounter : for i in 1 to 4 loop
+					RAMindexCounter(i) <= RAMindexCounter(i) + 1;
+				end loop;
+			elsif RAMindexCounter(1) >= 4 then
+				RAMtoInputController <= (others => (others => '-'));
+				RAMindexCounter <= (1 => 0, 2 => 4, 3 => 8, 4 => 12);
+				--DONE GIVING DATA TO INPUT CONTROLLER
 			end if;
-			convertToSignal <= to_slv(array_data);
 		elsif enable = '0' then
-			array_counter <= 0;
+			RAMtoInputController <= (others => (others => '-'));
+			RAMindexCounter <= (1 => 0, 2 => 4, 3 => 8, 4 => 12);
 		end if;
 	end if;
 end process;
-LEDG <= convertToSignal(7 downto 0);
-LEDR(7 downto 0) <= convertToSignal(15 downto 8);
 
 read_enabled <= SW(0);
-LEDR(8) <= read_enabled;
+write_enabled <= SW(9);
+LEDR(8) <= '1' when (read_enabled = '1' and write_enabled = '0') else
+					 '1' when (read_enabled = '0' and write_enabled = '1') else '0';
 --
 SRAM_A <= address;
 SRAM_CE_n <= ce;
@@ -93,6 +151,13 @@ SRAM_UB_n <= ub;
 SRAM_LB_n <= lb;
 SRAM_OE_n <= oe;
 SRAM_WE_n <= we;
+
+-- InputController_inst : InputController PORT MAP (
+-- 		CLK    => dividedClock,
+-- 		reset  => SW(4),
+-- 		input  => RAMtoInputController,
+-- 		output => signalForOutputController
+-- );
 
 MemoryBuffer_inst : MemoryBuffer PORT MAP (
 		datain	 => data_in,
@@ -129,24 +194,27 @@ begin
 	end if;
 end process;
 
+--Reads data from SRAM and inserts them in local RAM
 MEM_READ : process(dividedClock)
 begin
 	if dividedClock = '1' and dividedClock'event then
 		if enable = '0' then
-			if memoryIndex < 16 then
-				A(memoryIndex) <= to_sfixed(data_out, A(0)'high, A(0)'low);
+			if memoryIndex < 16 and readingInA='1' then
+				A(memoryIndex) <= data_out;--to_sfixed(data_out, A(0)'high, A(0)'low);
 				memoryIndex <= memoryIndex + 1;
 				enable <= '0';
-			elsif memoryIndex = 16 then
+			elsif memoryIndex = 16 and readingInA='1' then
 				operation <= data_out(3 downto 0);
-				memoryIndex <= memoryIndex + 1;
+				-- memoryIndex <= memoryIndex + 1;
+				memoryIndex <= 0; -- resets index for B array (RAM)
+				readingInA <= '0';
 				enable <= '0';
-			elsif memoryIndex < 33 then--< 33 then
-				B(memoryIndex) <= to_sfixed(data_out, A(0)'high, A(0)'low);
+			elsif memoryIndex < 16 and readingInA = '0' then--< 33 then
+				B(memoryIndex) <= data_out;--to_sfixed(data_out, A(0)'high, A(0)'low);
 				memoryIndex <= memoryIndex + 1;
 				enable <= '0';
 			else
-				enable <= '1';
+				enable <= '1'; --done reading and writing in RAM
 			-- 	memoryIndex <= 0;
 			end if;
 		else
@@ -155,6 +223,14 @@ begin
 	end if;
 end process;
 
+MEM_WRITE : process(dividedClock)
+begin
+	if dividedClock = '1' and dividedClock'event then
+		if read_enabled = '0' and write_enabled = '1' then
+
+		end if;
+	end if;
+end process;
 
 --CLOCK STUFF
 

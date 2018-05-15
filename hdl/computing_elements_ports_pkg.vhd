@@ -11,9 +11,14 @@ package computing_elements_ports_pkg is
 
   -- subtype x_type is sfixed(31 downto -32); --2^(10-1) = +/- 512
   -- subtype x_type is sfixed(15 downto -14);
-  subtype x_type is sfixed(8 downto -12); --2^(10-1) = +/- 512
+  -- subtype x_type is sfixed(7 downto -12); --2^(10-1) = +/- 512
+  -- subtype x_type is sfixed(7 downto -18);
+  subtype x_type is sfixed(7 downto -8);
   subtype address is std_logic_vector(5 downto 0); --2^6 = 64; N=4;P=4;
   -- subtype x_type is signed(8 downto 0);
+  subtype counter_type is std_logic_vector(2 downto 0);
+  subtype data_from_memory is std_logic_vector(15 downto 0);
+  -- subtype data_from_memory is std_logic_vector(31 downto 0);
 
   -- Outputs outter computing element.
   type outterCE_OUT is record
@@ -45,6 +50,10 @@ package computing_elements_ports_pkg is
     value: x_type;
     phase: STD_LOGIC;
   end record valueAndPhase;
+
+  type InputController_IN is array(8 downto 1) of data_from_memory;
+  type OutputController_OUT is array(4 downto 1) of data_from_memory;
+
 
   type SystolicArrayScale_IN is array (8 downto 1) of valueAndPhase;
   type SystolicArrayScale_OUT is array (4 downto 1) of x_type;
