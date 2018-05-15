@@ -13,10 +13,9 @@ ARCHITECTURE DelayElementPERF_arch OF DelayElementPERF_vhd_tst IS
 constant Clk_period : time := 10 ns;
 -- signals
 signal clk : std_logic := '0';
-SIGNAL xIN, xOUT, xOUT2, xOUT3, xOUT4 : x_type;
-SIGNAL phaseOUT, phaseOUT2, phaseOUT3, phaseOUT4 : STD_LOGIC;
+SIGNAL xIN, xOUT, xOUT2, xOUT3, xOUT4, xOUT5 : x_type;
+SIGNAL phaseOUT, phaseOUT2, phaseOUT3, phaseOUT4, phaseOUT5 : STD_LOGIC;
 SIGNAL reset : STD_LOGIC := '1';
-SIGNAL resetOUT, resetOUT2, resetOUT3, resetOUT4 : STD_LOGIC;
 
 component DelayElementPerf
 GENERIC(DELAYCOUNT : INTEGER);
@@ -71,6 +70,16 @@ PORT MAP (
 		output.phase => phaseOUT4
 	);
 
+	UUT_DELAY_3 : DelayElementPerf
+	GENERIC MAP ( DELAYCOUNT => 3)
+	PORT MAP (
+		CLK => clk,
+		resetIN => reset,
+		input => xIN,
+		output.value => xOUT5,
+		output.phase => phaseOUT5
+	);
+
 init : PROCESS
 BEGIN
 WAIT;
@@ -91,7 +100,7 @@ always : PROCESS
 -- variable declarations
 BEGIN
   reset <= '0';
-  wait until rising_edge(clk);
+	wait until rising_edge(clk);
   reset <= '1';
 	xIN <= "0000000100000000";
 	wait until rising_edge(clk);
@@ -108,6 +117,12 @@ BEGIN
 	xIN <= "0000001100000010";
 	wait until rising_edge(clk);
 	xIN <= "0000001100000011";
+	wait until rising_edge(clk);
+	wait until rising_edge(clk);
+	wait until rising_edge(clk);
+	wait until rising_edge(clk);
+	wait until rising_edge(clk);
+	reset <= '0';
 	wait until rising_edge(clk);
 
 

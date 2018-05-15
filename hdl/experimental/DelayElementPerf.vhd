@@ -21,53 +21,64 @@ entity DelayElementPerf is
 end DelayElementPerf;
 
 architecture structure of DelayElementPerf is
-type storedsignals is array (7 downto 0) of x_type;
+--Not DELAYCOUNT-1, because 0-1 = -1 downto 0 INVALID
+type delayArray is array (DELAYCOUNT downto 0) of x_type;
 --local signals
 --counter counts delayed cycles
 --reader outputs saved values once DELAYCOUNT is reached
-signal counter, reader : INTEGER := 0;
-signal store : storedsignals;
+signal counter, delayCounter : INTEGER := 0;
+signal delArray : delayArray := (others => (others => '0'));
+
 
 begin
-	delayprocess : process(CLK)
+
+	phaseCalc : process(CLK, resetIN)
+	begin
+		if resetIN = '1' then
+			if CLK='1' and CLK'event then
+				if counter < 4 then
+					output.phase <= '0';
+				elsif counter < 8 then
+					output.phase <= '1';
+				end if;
+				if delayCounter > DELAYCOUNT-1 then
+					counter <= counter + 1;
+				end if;
+				delayCounter <= delayCounter + 1;
+			end if;
+		elsif resetIN = '0' then
+			delayCounter <= 0;
+			counter <= 0;
+		end if;
+	end process;
+
+
+	delayprocess : process(CLK, resetIN)
 	begin
     if resetIN = '1' then
-  		if DELAYCOUNT = 0 then
-  			if CLK='1' and CLK'event then
-  				output.value <= input;
-          if counter < 4 then
-            output.phase <= '0';
-          elsif counter < 8 then
-            output.phase <= '1';
-          end if;
-					counter <= counter + 1;
-        end if;
-  		else -- 1 to N delay
-  			if CLK='1' and CLK'event then
-  				if counter < DELAYCOUNT then
-  					store(counter) <= input;
-  					output <= defaultValueAndPhase;
-  					counter <= counter + 1;
-  				else
-  					if counter < 8 then
-  						store(counter) <= input;
-  						counter <= counter + 1;
-  					end if;
-  					if reader < 8 then
-  						output.value <= store(reader);
-              if reader < 4 then
-                output.phase <= '0';
-              else
-                output.phase <= '1';
-              end if;
-  						reader <= reader + 1;
-  					end if;
-  				end if;
-  			end if;
-  		end if;
-    elsif resetIN = '0' then
-      reader  <= 0;
-      counter <= 0;
+			if CLK = '1' and CLK'event then
+				--GENERICS CASES
+				if DELAYCOUNT = 0 then
+						output.value <= input;
+				elsif DELAYCOUNT = 1 then
+						delArray(0) <= input;
+						output.value <= delArray(0);
+				elsif DELAYCOUNT > 0 then
+						delay : for i in 0 to DELAYCOUNT-1 loop
+							if i = 0 then
+								delArray(i) <= input;
+							elsif i = DELAYCOUNT then
+								delArray(i) <= delArray(i-1);
+							else
+								output.value <= delArray(DELAYCOUNT-1);
+								delArray(i) <= delArray(i-1);
+							end if;
+						end loop;
+					end if;
+				end if;
+				--GENERIC CASES ENDS
+			elsif resetIN = '0' then
+					delArray <= (others => (others => '0'));
     end if;
 	end process;
 end structure;
