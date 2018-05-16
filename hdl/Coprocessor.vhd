@@ -40,13 +40,17 @@ architecture structure of Coprocessor is
 		PORT(
 	  --ROM?
 			CLK    : in STD_LOGIC;
-			-- enable: in STD_LOGIC;
+			enable: in STD_LOGIC;
+			operation: STD_LOGIC_VECTOR(3 downto 0);
+			A: in columnSignals;
+			B: in columnSignals;
 			reset  : in STD_LOGIC;
-			input  : in InputController_IN;
+			-- input  : in InputController_IN;
 			output : out SystolicArray_IN
 		);
 	end COMPONENT;
 
+	--types
 	--constants
 	constant oeENABLE : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 	constant oeDISABLE : STD_LOGIC_VECTOR(15 downto 0) := (others => '1');
@@ -61,7 +65,6 @@ architecture structure of Coprocessor is
 	-- 0 => add, 1 => subtract, 2 => multiplication, 3 => Inversion
 	signal operation : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
 	--local memory
-	type columnsignals is array(15 downto 0) of data_from_memory;
 	-- signal column1, column2, column3, column4,
 	-- 			 column5, column6, column7, column8 : columnsignals;
 	signal A, B : columnSignals;
@@ -71,7 +74,7 @@ architecture structure of Coprocessor is
 	signal dividedClock: STD_LOGIC := '0';
 	signal divideCounter: STD_LOGIC_VECTOR(26 downto 0):= (others => '0');
 	signal SWvalues : STD_LOGIC_VECTOR(8 downto 0) := (others => '0');
-	signal array_data : x_type;
+	signal array_data : data_from_memory;
 	signal array_counter : INTEGER := 0;
 	signal clocky : STD_LOGIC := '0';
 	signal convertToSignal : data_from_memory := (others => '0');
@@ -100,73 +103,56 @@ begin
 	);
 
 	InputController_inst : InputControllerPerf PORT MAP (
-			CLK    => dividedClock,
-			reset  => enableInputController,
-			input  => RAMtoInputController,
-			output => DataFromInputController
+			CLK       => dividedClock,
+			enable    => enable,
+			operation => operation,
+			A         => A,
+			B         => B,
+			reset     => enableInputController,
+			-- input     => RAMtoInputController,
+			output    => DataFromInputController
 	);
-	convertToSignal <= to_slv(DataFromInputController.column3.value);
-	LEDR(8) <= DataFromInputController.column3.phase;
+
+	convertToSignal <= to_slv(DataFromInputController.column8.value);
+	-- -- LEDR(8) <= DataFromInputController.column3.phase;
+	LEDR(8) <= enable;
 	-- LEDG <= convertToSignal(7 downto 0);
 	LEDG <= convertToSignal(15 downto 8);
 	-- LEDR(7 downto 0) <= convertToSignal(15 downto 8);
 	LEDR(7 downto 0) <= cycleCounter;
 	-- enableCycleCounter <= SW(6);
-	--converts signal to output it with LEDs
--- TESTING ZONE
-
--- testigais : process(SW(1), dividedClock)
+	----
+-- LEDG <= RAMtoInputController(2)(7 downto 0);
+-- LEDR(7 downto 0) <= RAMtoInputController(2)(15 downto 8);
+-- dataToInContr : process(SW(1), dividedClock)
 -- begin
 -- 	if dividedClock = '1' and dividedClock'event then
--- 		if enable = '1' then
--- 			if SW(1) = '1' then
--- 				array_data <= A(array_counter);
--- 				array_counter <= array_counter + 1;
--- 			elsif SW(1) = '0' then
--- 				array_data <= B(array_counter);
--- 				array_counter <= array_counter + 1;
+-- 		if enable = '1' then --done reading memory and writing to ram
+-- 			enableInputController <= '1';
+-- 			if RAMindexCounter(1) < 4 then
+-- 				--each row has its own counter
+-- 				RAMtoInputController(1) <= A(RAMindexCounter(1));
+-- 				RAMtoInputController(2) <= A(RAMindexCounter(2));
+-- 				RAMtoInputController(3) <= A(RAMindexCounter(3));
+-- 				RAMtoInputController(4) <= A(RAMindexCounter(4));
+-- 				RAMtoInputController(5) <= B(RAMindexCounter(1));
+-- 				RAMtoInputController(6) <= B(RAMindexCounter(2));
+-- 				RAMtoInputController(7) <= B(RAMindexCounter(3));
+-- 				RAMtoInputController(8) <= B(RAMindexCounter(4));
+-- 				addToCounter : for i in 1 to 4 loop
+-- 					RAMindexCounter(i) <= RAMindexCounter(i) + 1;
+-- 				end loop;
+-- 			elsif RAMindexCounter(1) >= 4 then
+-- 				RAMtoInputController <= (others => (others => '-'));
+-- 				RAMindexCounter <= (1 => 0, 2 => 4, 3 => 8, 4 => 12);
+-- 				--DONE GIVING DATA TO INPUT CONTROLLER
 -- 			end if;
--- 			-- convertToSignal <= to_slv(array_data);
 -- 		elsif enable = '0' then
--- 			array_counter <= 0;
+-- 			RAMtoInputController <= (others => (others => '-'));
+-- 			RAMindexCounter <= (1 => 0, 2 => 4, 3 => 8, 4 => 12);
 -- 		end if;
 -- 	end if;
 -- end process;
--- LEDG <= convertToSignal(7 downto 0);
--- LEDR(7 downto 0) <= convertToSignal(15 downto 8);
-
-
--- LEDG <= RAMtoInputController(2)(7 downto 0);
--- LEDR(7 downto 0) <= RAMtoInputController(2)(15 downto 8);
-dataToInContr : process(SW(1), dividedClock)
-begin
-	if dividedClock = '1' and dividedClock'event then
-		if enable = '1' then --done reading memory and writing to ram
-			enableInputController <= '1';
-			if RAMindexCounter(1) < 4 then
-				--each row has its own counter
-				RAMtoInputController(1) <= A(RAMindexCounter(1));
-				RAMtoInputController(2) <= A(RAMindexCounter(2));
-				RAMtoInputController(3) <= A(RAMindexCounter(3));
-				RAMtoInputController(4) <= A(RAMindexCounter(4));
-				RAMtoInputController(5) <= B(RAMindexCounter(1));
-				RAMtoInputController(6) <= B(RAMindexCounter(2));
-				RAMtoInputController(7) <= B(RAMindexCounter(3));
-				RAMtoInputController(8) <= B(RAMindexCounter(4));
-				addToCounter : for i in 1 to 4 loop
-					RAMindexCounter(i) <= RAMindexCounter(i) + 1;
-				end loop;
-			elsif RAMindexCounter(1) >= 4 then
-				RAMtoInputController <= (others => (others => '-'));
-				RAMindexCounter <= (1 => 0, 2 => 4, 3 => 8, 4 => 12);
-				--DONE GIVING DATA TO INPUT CONTROLLER
-			end if;
-		elsif enable = '0' then
-			RAMtoInputController <= (others => (others => '-'));
-			RAMindexCounter <= (1 => 0, 2 => 4, 3 => 8, 4 => 12);
-		end if;
-	end if;
-end process;
 
 read_enabled <= SW(0);
 write_enabled <= SW(9);
@@ -252,7 +238,7 @@ divider : process(CLOCK_50_B5B)
 begin
 	if CLOCK_50_B5B='1' and CLOCK_50_B5B'event then
 		divideCounter <= divideCounter + '1';
-		dividedClock <= divideCounter(24);
+		dividedClock <= divideCounter(22);
 	end if;
 end process;
 
@@ -274,8 +260,8 @@ indicator : process(dividedClock)
 begin
 	if dividedClock = '1' and dividedClock'event then
 		if enableCycleCounter='1' then
-			-- if  to_slv(DataFromInputController.column3.value) = "0000000100000000" then
-			if DataFromInputController.column3.phase = '1' then
+			if  to_slv(DataFromInputController.column8.value) = "0001000000000000" then
+			-- if DataFromInputController.column3.phase = '1' then
 			-- if DataFromInputController.column1.value = xType_one then
 			-- if RAMtoInputController(1) = "0000000000000001" then
 				enableCycleCounter <= '0';

@@ -19,6 +19,7 @@ package computing_elements_ports_pkg is
   subtype counter_type is std_logic_vector(2 downto 0);
   subtype data_from_memory is std_logic_vector(15 downto 0);
   -- subtype data_from_memory is std_logic_vector(31 downto 0);
+  type columnsignals is array(15 downto 0) of data_from_memory;
 
   -- Outputs outter computing element.
   type outterCE_OUT is record
@@ -76,7 +77,6 @@ package computing_elements_ports_pkg is
     column4: x_type;
   end record SystolicArray_OUT;
 
-
   constant xType_zero_constant : x_type := (others=>'0');--"000000000000000000000";
   constant xType_one : x_type := (0 => '1', others => '0');
   constant xType_lowest_value : x_type := (
@@ -90,11 +90,15 @@ package computing_elements_ports_pkg is
     value => xType_zero_constant,
     phase => '0'
   );
---  constant c_FROM_FIFO_INIT : t_FROM_FIFO := (wr_full => '0',
---                                              rd_empty => '1',
---                                              rd_dv => '0',
---                                              rd_data => (others => '0'));
---
+  constant one : data_from_memory := "0000000000000001";
+
+  constant zeroMatrix : columnsignals := (others => (others => '0'));
+	constant identityMatrix : columnsignals := (
+																								0      => one,
+																								5      => one,
+																								10     => one,
+																								15     => one,
+																								others => (others => '0') );
 
 
 end package computing_elements_ports_pkg;
