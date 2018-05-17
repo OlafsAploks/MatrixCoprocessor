@@ -50,24 +50,34 @@ architecture structure of Coprocessor is
 		);
 	end COMPONENT;
 
+	COMPONENT SystolicArray is
+		PORT(
+	  --ROM?
+	    CLK: in STD_LOGIC;
+			input: in SystolicArray_IN;
+	    output: out SystolicArray_OUT
+		);
+		END COMPONENT;
+
 	--types
 	--constants
 	constant oeENABLE : STD_LOGIC_VECTOR(15 downto 0) := (others => '0');
 	constant oeDISABLE : STD_LOGIC_VECTOR(15 downto 0) := (others => '1');
 	--local signals
 	signal enable : STD_LOGIC := '0';
-	signal read_enabled, write_enabled : STD_LOGIC := '0';
+	signal read_enabled : STD_LOGIC := '1';
+	signal write_enabled : STD_LOGIC := '0';
 	signal address : STD_LOGIC_VECTOR(17 downto 0) := (others => '0');
 	signal ce, we, oe, ub, lb : STD_LOGIC;
 	signal data_out, write_pointer : STD_LOGIC_VECTOR(15 downto 0) := (others => '0'); --data that comes out of memory
-	signal data_in : STD_LOGIC_VECTOR(15 downto 0) := "0000000001000001"; --data that needs to be written in memory
+	signal data_in : STD_LOGIC_VECTOR(15 downto 0) := "0101010101010101"; --data that needs to be written in memory
 	signal oeVector : STD_LOGIC_VECTOR(15 downto 0);
 	-- 0 => add, 1 => subtract, 2 => multiplication, 3 => Inversion
 	signal operation : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
 	--local memory
 	-- signal column1, column2, column3, column4,
 	-- 			 column5, column6, column7, column8 : columnsignals;
-	signal A, B : columnSignals;
+	signal A, B, RES : columnSignals;
 	signal memoryIndex: INTEGER := 0;
 	--TEEEEEEEEEMP
 	signal xtype_one: x_type := (0 => '1', others => '0');
@@ -78,8 +88,18 @@ architecture structure of Coprocessor is
 	signal array_counter : INTEGER := 0;
 	signal clocky : STD_LOGIC := '0';
 	signal convertToSignal : data_from_memory := (others => '0');
-	signal cycleCounter : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+	--MEMORY CONTROl
+	signal enableWriteToMemory : STD_LOGIC := '0';
 	signal enableCycleCounter: STD_LOGIC := '1';
+	signal cycleCounter : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
+	--MEM_WRITE status signals
+	subtype WRITE_STATUS is STD_LOGIC_VECTOR(3 downto 0);
+	signal write_permissions : WRITE_STATUS := (others => '0');
+	signal c1Counter : INTEGER := 0;
+	signal c2Counter : INTEGER := 4;
+	signal c3Counter : INTEGER := 8;
+	signal c4Counter : INTEGER := 12;
+	signal memoryWriteCounter : INTEGER := 0;
 	--MEM_READ local
 	signal readingInA : STD_LOGIC := '1';
 	-- DATA from RAM to InputController
@@ -92,6 +112,8 @@ architecture structure of Coprocessor is
 	signal enableInputController : STD_LOGIC := '0';
 	--DATA from InputController
 	signal DataFromInputController : SystolicArray_IN;
+	--DATA from SystolicArray
+	signal DataFromSystolicArray : SystolicArray_OUT;
 	--COMPONENT declaration
 begin
 
@@ -109,53 +131,25 @@ begin
 			A         => A,
 			B         => B,
 			reset     => enableInputController,
-			-- input     => RAMtoInputController,
 			output    => DataFromInputController
 	);
 
-	convertToSignal <= to_slv(DataFromInputController.column8.value);
-	-- -- LEDR(8) <= DataFromInputController.column3.phase;
-	LEDR(8) <= enable;
+	SystolicArray_inst : SystolicArray PORT MAP (
+			CLK    => dividedClock,
+			input  => DataFromInputController,
+			output => DataFromSystolicArray
+	);
+
+	-- convertToSignal <= to_slv(DataFromSystolicArray.column1);
+	-- convertToSignal <= to_slv(DataFromInputController.column2.value);
+	-- LEDR(8) <= DataFromInputController.column3.phase;
 	-- LEDG <= convertToSignal(7 downto 0);
-	LEDG <= convertToSignal(15 downto 8);
+	-- LEDG <= convertToSignal(15 downto 8);
 	-- LEDR(7 downto 0) <= convertToSignal(15 downto 8);
 	LEDR(7 downto 0) <= cycleCounter;
-	-- enableCycleCounter <= SW(6);
-	----
--- LEDG <= RAMtoInputController(2)(7 downto 0);
--- LEDR(7 downto 0) <= RAMtoInputController(2)(15 downto 8);
--- dataToInContr : process(SW(1), dividedClock)
--- begin
--- 	if dividedClock = '1' and dividedClock'event then
--- 		if enable = '1' then --done reading memory and writing to ram
--- 			enableInputController <= '1';
--- 			if RAMindexCounter(1) < 4 then
--- 				--each row has its own counter
--- 				RAMtoInputController(1) <= A(RAMindexCounter(1));
--- 				RAMtoInputController(2) <= A(RAMindexCounter(2));
--- 				RAMtoInputController(3) <= A(RAMindexCounter(3));
--- 				RAMtoInputController(4) <= A(RAMindexCounter(4));
--- 				RAMtoInputController(5) <= B(RAMindexCounter(1));
--- 				RAMtoInputController(6) <= B(RAMindexCounter(2));
--- 				RAMtoInputController(7) <= B(RAMindexCounter(3));
--- 				RAMtoInputController(8) <= B(RAMindexCounter(4));
--- 				addToCounter : for i in 1 to 4 loop
--- 					RAMindexCounter(i) <= RAMindexCounter(i) + 1;
--- 				end loop;
--- 			elsif RAMindexCounter(1) >= 4 then
--- 				RAMtoInputController <= (others => (others => '-'));
--- 				RAMindexCounter <= (1 => 0, 2 => 4, 3 => 8, 4 => 12);
--- 				--DONE GIVING DATA TO INPUT CONTROLLER
--- 			end if;
--- 		elsif enable = '0' then
--- 			RAMtoInputController <= (others => (others => '-'));
--- 			RAMindexCounter <= (1 => 0, 2 => 4, 3 => 8, 4 => 12);
--- 		end if;
--- 	end if;
--- end process;
-
-read_enabled <= SW(0);
-write_enabled <= SW(9);
+-- LEDR(8) <= enableCycleCounter;
+-- read_enabled <= SW(0);
+-- write_enabled <= SW(9);
 -- LEDR(8) <= '1' when (read_enabled = '1' and write_enabled = '0') else
 -- 					 '1' when (read_enabled = '0' and write_enabled = '1') else '0';
 --
@@ -205,7 +199,6 @@ begin
 				enable <= '0';
 			elsif memoryIndex = 16 and readingInA='1' then
 				operation <= data_out(3 downto 0);
-				-- memoryIndex <= memoryIndex + 1;
 				memoryIndex <= 0; -- resets index for B array (RAM)
 				readingInA <= '0';
 				enable <= '0';
@@ -215,6 +208,7 @@ begin
 				enable <= '0';
 			else
 				enable <= '1'; --done reading and writing in RAM
+				read_enabled <= '0';
 			-- 	memoryIndex <= 0;
 			end if;
 		else
@@ -226,10 +220,53 @@ end process;
 MEM_WRITE : process(dividedClock)
 begin
 	if dividedClock = '1' and dividedClock'event then
-		if read_enabled = '0' and write_enabled = '1' then
-
+		if read_enabled = '0' and enableWriteToMemory = '1' then
+			if memoryWriteCounter < 16 then
+				write_enabled <= '1';
+				data_in <= RES(memoryWriteCounter);
+				-- convertToSignal <= RES(memoryWriteCounter);
+				memoryWriteCounter <= memoryWriteCounter + 1;
+			else
+				write_enabled <= '0';
+			end if;
 		end if;
 	end if;
+end process;
+
+SAVE_RES_IN_MEM : process(dividedClock, write_permissions)
+begin
+	if dividedClock='1' and dividedClock'event then
+
+		if write_permissions(0) = '1' then
+			RES(c1Counter) <= to_slv(DataFromSystolicArray.column1);
+			c1Counter <= c1Counter + 1;
+		elsif write_permissions(0) = '0' then
+			c1Counter <= 0;
+		end if;
+
+		if write_permissions(1) = '1' then
+			RES(c2Counter) <= to_slv(DataFromSystolicArray.column2);
+			c2Counter <= c2Counter + 1;
+		elsif write_permissions(1) = '0' then
+			c2Counter <= 4;
+		end if;
+
+		if write_permissions(2) = '1' then
+			RES(c3Counter) <= to_slv(DataFromSystolicArray.column3);
+			c3Counter <= c3Counter + 1;
+		elsif write_permissions(2) = '0' then
+			c3Counter <= 8;
+		end if;
+
+		if write_permissions(3) = '1' then
+			RES(c4Counter) <= to_slv(DataFromSystolicArray.column4);
+			-- convertToSignal <= to_slv(DataFromSystolicArray.column4);
+			c4Counter <= c4Counter + 1;
+		elsif write_permissions(3) = '0' then
+			c4Counter <= 12;
+		end if;
+	end if;
+
 end process;
 
 --CLOCK STUFF
@@ -249,26 +286,44 @@ begin
 			address <= address + '1';
 		elsif write_enabled = '1' then
 			address <= address + '1';
-		else
+		else --JĀIZDOMĀ KKO CITU -----------------------------
 			address <= (others => '0');
 		end if;
 	end if;
 end process;
+
+-- write_permissions <= "0001" when cycleCounter = 47 else
+-- 										 "0011" when cycleCounter = 48 else
+-- 										 "0111" when cycleCounter = 49 else
+-- 										 "1111" when cycleCounter = 50 else
+-- 										 "1110" when cycleCounter = 51 else
+-- 										 "1100" when cycleCounter = 52 else
+-- 										 "1000" when cycleCounter = 53 else
+-- 										 "0000";
+
+	write_permissions <= "0001" when cycleCounter = 48 else
+												"0011" when cycleCounter = 49 else
+												"0111" when cycleCounter = 50 else
+												"1111" when cycleCounter = 51 else
+												"1110" when cycleCounter = 52 else
+												"1100" when cycleCounter = 53 else
+												"1000" when cycleCounter = 54 else
+												"0000";
 
 LEDR(9) <= clocky;
 indicator : process(dividedClock)
 begin
 	if dividedClock = '1' and dividedClock'event then
 		if enableCycleCounter='1' then
-			if  to_slv(DataFromInputController.column8.value) = "0001000000000000" then
-			-- if DataFromInputController.column3.phase = '1' then
-			-- if DataFromInputController.column1.value = xType_one then
-			-- if RAMtoInputController(1) = "0000000000000001" then
+			if cycleCounter > 47 and cycleCounter < 54 then -- ENABLE READING ONE CYCLE BEFORE INPUT COMES IN
+				enableWriteToMemory <= '1';
+				cycleCounter <= cycleCounter + '1';
+			elsif cycleCounter = 54 then
 				enableCycleCounter <= '0';
-				cycleCounter <= cycleCounter + '1';
 			else
-				cycleCounter <= cycleCounter + '1';
+				enableWriteToMemory <= '0';
 			end if;
+				cycleCounter <= cycleCounter + '1';
 		elsif enableCycleCounter = '0' then
 			cycleCounter <= cycleCounter;
 		end if;

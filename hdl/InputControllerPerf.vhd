@@ -76,7 +76,7 @@ begin
 		elsif operation = "0011" then --Inversion
 			matrixA <= A;
 			matrixB <= identityMatrix;
-			matrixC <= identityMatrix; --NEGATIVE vienibas matrica
+			matrixC <= N_identityMatrix; --NEGATIVE vienibas matrica
 			matrixD <= zeroMatrix;
 		-- elsif expression then --division?
 		end if;

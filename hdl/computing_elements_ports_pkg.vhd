@@ -90,15 +90,22 @@ package computing_elements_ports_pkg is
     value => xType_zero_constant,
     phase => '0'
   );
-  constant one : data_from_memory := "0000000000000001";
+  constant one       : data_from_memory := "0000000100000000";
+  constant minus_one : data_from_memory := "1111111100000000";
 
   constant zeroMatrix : columnsignals := (others => (others => '0'));
 	constant identityMatrix : columnsignals := (
-																								0      => one,
-																								5      => one,
-																								10     => one,
-																								15     => one,
-																								others => (others => '0') );
+  0      => one,
+  5      => one,
+  10     => one,
+  15     => one,
+  others => (others => '0'));
+  constant N_identityMatrix : columnSignals := (
+  0      => minus_one,
+  5      => minus_one,
+  10     => minus_one,
+  15     => minus_one,
+  others => (others => '0'));
 
 
 end package computing_elements_ports_pkg;

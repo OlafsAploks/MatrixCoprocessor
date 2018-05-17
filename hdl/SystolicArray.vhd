@@ -185,7 +185,7 @@ begin
   );
   -- SECOND ROW ---
 	----------------------------------------------------------
-	oe_2_1 : outterCE PORT MAP(
+	oe_2_1  : outterCE PORT MAP(
     CLK => CLK,
     input.x => ie_1_2_signals.x,
     input.phase => ie_1_2_signals.phase,
@@ -194,7 +194,7 @@ begin
     -- output.phase => oe_2_1_signals.phase
   );
 
-	ie_2_2 : innerCE PORT MAP(
+	ie_2_2  : innerCE PORT MAP(
     CLK => CLK,
     input.phase => ie_1_3_signals.phase,
     input.x => ie_1_3_signals.x,
@@ -267,7 +267,7 @@ begin
   );
 	-- THIRD ROW ---
 	----------------------------------------------------------
-	oe_3_1 : outterCE PORT MAP(
+	oe_3_1  : outterCE PORT MAP(
     CLK => CLK,
     input.x => ie_2_2_signals.x,
     input.phase => ie_2_2_signals.phase,
@@ -276,7 +276,7 @@ begin
     -- output.phase => oe_3_1_signals.phase
   );
 
-	ie_3_2 : innerCE PORT MAP(
+	ie_3_2  : innerCE PORT MAP(
     CLK => CLK,
     input.phase => ie_2_3_signals.phase,
     input.x => ie_2_3_signals.x,
@@ -338,7 +338,7 @@ begin
 	-- FOURTH ROW ---
 	----------------------------------------------------------
 
-	oe_4_1 : outterCE PORT MAP(
+	oe_4_1  : outterCE PORT MAP(
     CLK => CLK,
     input.x => ie_3_2_signals.x,
     input.phase => ie_3_2_signals.phase,
@@ -347,7 +347,7 @@ begin
     -- output.phase => oe_4_1_signals.phase
   );
 
-	ie_4_2 : innerCE PORT MAP(
+	ie_4_2  : innerCE PORT MAP(
     CLK => CLK,
     input.phase => ie_3_3_signals.phase,
     input.x => ie_3_3_signals.x,
@@ -373,26 +373,26 @@ begin
 
   ie_4_4 : innerCE PORT MAP(
     CLK => CLK,
-    input.phase => ie_3_5_signals.phase,
-    input.x => ie_3_5_signals.x,
-    input.m => ie_4_3_signals.m,
-    input.s => ie_4_3_signals.s,
-    output.s => ie_4_4_signals.s,
+    input.phase  => ie_3_5_signals.phase,
+    input.x      => ie_3_5_signals.x,
+    input.m      => ie_4_3_signals.m,
+    input.s      => ie_4_3_signals.s,
+    output.s     => ie_4_4_signals.s,
     output.phase => ie_4_4_signals.phase,
-    output.m => ie_4_4_signals.m,
-    output.x => ie_4_4_signals.x
+    output.m     => ie_4_4_signals.m,
+    output.x     => ie_4_4_signals.x
   );
 
   ie_4_5 : innerCE PORT MAP(
     CLK => CLK,
-    input.phase => ie_3_6_signals.phase,
-    input.x => ie_3_6_signals.x,
-    input.m => ie_4_4_signals.m,
-    input.s => ie_4_4_signals.s,
-    output.s => ie_4_5_signals.s,
+    input.phase  => ie_3_6_signals.phase,
+    input.x      => ie_3_6_signals.x,
+    input.m      => ie_4_4_signals.m,
+    input.s      => ie_4_4_signals.s,
+    output.s     => ie_4_5_signals.s,
     output.phase => ie_4_5_signals.phase,
-    output.m => ie_4_5_signals.m,
-    output.x => ie_4_5_signals.x
+    output.m     => ie_4_5_signals.m,
+    output.x     => ie_4_5_signals.x
   );
 
 	--output wiring
