@@ -33,7 +33,7 @@ signal convSignals : convertedSignals;
 --------------------------
 type toBeConverted is array (15 downto 0) of data_from_memory;
 signal tbc : toBeConverted;
-signal matrixA, matrixB, matrixC, matrixD : columnsignals;
+signal matrixA, matrixB, matrixC, matrixD, Neg_matrix : columnsignals;
 signal toConvert : InputController_IN;
 --------------------------
 signal RAMtoInputController : data_from_memory;
@@ -59,14 +59,20 @@ setup_input : process(A,B,operation)
 begin
 	if CLK='1' and CLK'event then
 		if operation = "0010" then --multiplication
+			TO_NEGATIVE_M_MULTIPLICATION : for i in 0 to 15 loop
+				Neg_matrix(i) <= -A(i);
+			end loop;
 			matrixA <= identityMatrix;
 			matrixB <= B;
-			matrixC <= A;
+			matrixC <= Neg_matrix;
 			matrixD <= zeroMatrix;
 		elsif operation = "0000" then --addition
+			TO_NEGATIVE_M_ADDITION : for i in 0 to 15 loop
+				Neg_matrix(i) <= -B(i);
+			end loop;
 			matrixA <= identityMatrix;
 			matrixB <= identityMatrix;
-			matrixC <= B; --minus B
+			matrixC <= Neg_matrix; --minus B
 			matrixD <= A;
 		elsif operation = "0001" then --subtraction
 			matrixA <= identityMatrix;
