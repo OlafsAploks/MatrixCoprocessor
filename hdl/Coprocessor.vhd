@@ -233,7 +233,7 @@ begin
 	end if;
 end process;
 
-SAVE_RES_IN_MEM : process(dividedClock, write_permissions)
+OUTPUT_CONTROLLER : process(dividedClock, write_permissions)
 begin
 	if dividedClock='1' and dividedClock'event then
 
@@ -275,7 +275,7 @@ divider : process(CLOCK_50_B5B)
 begin
 	if CLOCK_50_B5B='1' and CLOCK_50_B5B'event then
 		divideCounter <= divideCounter + '1';
-		dividedClock <= divideCounter(22);
+		dividedClock <= divideCounter(2);
 	end if;
 end process;
 
@@ -291,15 +291,6 @@ begin
 		end if;
 	end if;
 end process;
-
--- write_permissions <= "0001" when cycleCounter = 47 else
--- 										 "0011" when cycleCounter = 48 else
--- 										 "0111" when cycleCounter = 49 else
--- 										 "1111" when cycleCounter = 50 else
--- 										 "1110" when cycleCounter = 51 else
--- 										 "1100" when cycleCounter = 52 else
--- 										 "1000" when cycleCounter = 53 else
--- 										 "0000";
 
 	write_permissions <= "0001" when cycleCounter = 48 else
 												"0011" when cycleCounter = 49 else
