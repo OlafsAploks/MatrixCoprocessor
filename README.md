@@ -1,11 +1,19 @@
 # Co-processor for Matrix calculations in embedded systems.
 
-Architecture of co-processor developed as a part of my Bachelor thesis. Made using VHDL, Quartus Prime 17.1 and Modelsim. Tested and programmed on FPGA (Cyclone V GX 5CGXFC5C6F27C7N).
-It uses Schur's complement,  modified Fadeev algorythm and systolic architecture to realize basic matrix operations (+, -, *, inversion) and their combinations in constant count of cycles.
+The architecture of co-processor developed as a part of my Bachelor thesis. Made using VHDL, Quartus Prime 17.1 and Modelsim. Tested and programmed on FPGA (Cyclone V GX 5CGXFC5C6F27C7N).
+It uses Schur's complement,  modified Fadeev algorithm and systolic architecture to realize basic matrix operations (+, -, *, inversion) and their combinations in constant count of cycles.
 
 ## Prototype
 
-Prototype is implemented using FPGA and VHDL and operates with 4x4 matrices in 12,5MHz frequency. With some modifications this should be easily improveable.
+The prototype is implemented using FPGA and VHDL and operates with 4x4 matrices in 12,5MHz frequency. With some modifications, this should be easily improvable.
+
+Architecture:
+![alt text](https://github.com/OlafsAploks/MatrixCoprocessor/blob/master/MatrixCoprocessorArchitectureFlow.png)
+
+As it can be seen in the diagram above, the current version of prototype reads information from (matrices) outer memory storage which is ** huge bottleneck ** (This way in most scenarios it is possible to read only one matrix cell in on clock cycle) and is implemented this way only for testing purposes. For significantly better experience connect data providers directly to FPGA.
+
+Possible operations according to algorythm:
+![alt text](https://github.com/OlafsAploks/MatrixCoprocessor/blob/master/MatrixOperationTable.png)
 
 ## Built With
 
