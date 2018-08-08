@@ -7,12 +7,12 @@ It uses Schur's complement,  modified Fadeev algorithm and systolic architecture
 
 The prototype is implemented using FPGA and VHDL and operates with 4x4 matrices in 12,5MHz frequency. With some modifications, this should be easily improvable.
 
-Architecture:
+Architecture:  
 ![alt text](https://github.com/OlafsAploks/MatrixCoprocessor/blob/master/MatrixCoprocessorArchitectureFlow.png)
 
-As it can be seen in the diagram above, the current version of prototype reads information from (matrices) outer memory storage which is ** huge bottleneck ** (This way in most scenarios it is possible to read only one matrix cell in on clock cycle) and is implemented this way only for testing purposes. For significantly better experience connect data providers directly to FPGA.
+As it can be seen in the diagram above, the current version of prototype reads information from (matrices) outer memory storage which is **HUGE bottleneck** (This way in most scenarios it is possible to read only one matrix cell in on clock cycle) and is implemented this way only for testing purposes. For significantly better experience connect data providers directly to FPGA.
 
-Possible operations according to algorythm:
+Possible operations according to algorythm:  
 ![alt text](https://github.com/OlafsAploks/MatrixCoprocessor/blob/master/MatrixOperationTable.png)
 
 ## Built With
@@ -23,5 +23,5 @@ Possible operations according to algorythm:
 * [FPGA board control panel](http://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=165&No=830&PartNo=4) - Used for testing purposes (reading from and writing to SRAM that is embedded in board)
 ## Authors
 
-* **Olafs Aploks** - *Initial work*, **Jānis Šate** - *Supervisor*
+* **Olafs Aploks** - author, **Jānis Šate** - supervisor
 
